@@ -1,0 +1,26 @@
+services:
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    command: tail -f /dev/null
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - ./data:/var/lib/mysql
+    command: yes database
+
+  users:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /bin/bash -c "while true; do echo 'users'; sleep 1; done"
+    volumes:
+      - ./structure:/structure
+
